@@ -14,22 +14,29 @@ const Sliding = ({ slides }) => {
 
   return (
     <div className='overflow-hidden relative w-full'>
-      {/* The slide container */}
-      <div 
+      <div
         className='flex transition ease-out duration-500'
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {slides.map((s, index) => (
-          <img
-            key={index} // Always add a unique key when mapping
-            src={s}
-            className='w-full flex-shrink-0 rounded-[30px]'
-            alt={`Slide ${index + 1}`}
-          />
+          <div key={index} className='relative w-full flex-shrink-0'>
+            <img
+              src={s}
+              className='w-full rounded-[30px]'
+              alt={`Slide ${index + 1}`}
+            />
+            {index === 0 && (
+              <div className='absolute inset-0 flex flex-col text-white'>
+                <h2 className='text-4xl mt-60 px-9 py-3 font-nsans-bold '>Welcome to Our Slideshow</h2>
+                <button className=' bg-blue-600 px-2  py-3'>
+                  Learn More
+                </button>
+              </div>
+            )}
+          </div>
         ))}
       </div>
 
-      {/* Navigation buttons */}
       <div className='absolute top-0 h-full w-full flex justify-between items-center text-white px-10 text-3xl'>
         <button onClick={previousSlide}>
           <FaCircleArrowLeft />
@@ -40,11 +47,17 @@ const Sliding = ({ slides }) => {
       </div>
 
       <div className='absolute bottom-0 py-4 flex justify-center gap-3 w-full'>
-       {slides.map((s,i)=>{
-         return (
-          <div onClick={()=>setCurrent(i)} key={"circle" + i} className={`rounded-full w-5 h-5 cursor-pointer ${i==current?'bg-white':'bg-gray-400'}`}></div>
-         )
-       })}
+        {slides.map((s, i) => {
+          return (
+            <div
+              onClick={() => setCurrent(i)}
+              key={'circle' + i}
+              className={`rounded-full w-5 h-5 cursor-pointer ${
+                i === current ? 'bg-white' : 'bg-gray-400'
+              }`}
+            ></div>
+          );
+        })}
       </div>
     </div>
   );
