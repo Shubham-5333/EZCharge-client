@@ -14,7 +14,7 @@ const UserRoutes = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<SignIn />} />
+        <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
         {/* <Route path="/user/dashboard" element={<UserDashboard />} /> */}
