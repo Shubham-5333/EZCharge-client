@@ -1,6 +1,6 @@
 import React from 'react';
 import google from '../assets/google.png';
-import SignIn from './SignIn';
+import {Link} from 'react-router-dom'
 
 const SignUp = () => {
   return (
@@ -62,6 +62,23 @@ const SignUp = () => {
                 />
               </div>
             </div>
+            <div>
+              <div className="flex items-center justify-between">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="confirmPassword"
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
 
             <div>
               <button
@@ -72,26 +89,12 @@ const SignUp = () => {
               </button>
             </div>
 
-            <div>
-              <button
-                type="button"
-                className="flex w-full justify-center items-center rounded-3xl bg-white border border-gray-300 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300"
-              >
-                <img
-                  src={google}
-                  alt="Google Logo"
-                  className="w-5 h-5 mr-2"
-                />
-                Sign up with Google
-              </button>
-            </div>
+      
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Already have an account?{SignIn}
-            <a href="/signIn" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Sign In
-            </a>
+            Already have an account?{' '}
+            <Link to={'/signIn'} className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'>Sign In</Link>
           </p>
         </div>
       </div>

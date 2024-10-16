@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaCircleArrowRight, FaCircleArrowLeft } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 
 const Sliding = ({ slides }) => {
   let [current, setCurrent] = useState(0);
@@ -29,9 +30,11 @@ const Sliding = ({ slides }) => {
               <div className='absolute inset-0 flex flex-col items-center justify-center text-white'>
                 <h1 className='text-4xl text-green-400 font-bold font-nsans-bold mb-4'>HEY!</h1>
                 <h3 className='text-3xl text-white font-bold font-nsans-bold mb-4'>WELCOME TO EZ CHARGE</h3><br />
+               <Link to={'/signIn'}>
                 <button className='px-6 py-3 font-bold font-nsans-bold bg-green-500 rounded-lg flex cursor-pointer items-center'>
                   Sign In <FaCircleArrowRight className='ml-2' />
                 </button>
+               </Link>
               </div>
             )}
 
