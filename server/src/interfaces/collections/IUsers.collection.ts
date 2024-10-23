@@ -1,11 +1,11 @@
-import { Document,Model,ObjectId } from "mongoose";
+import { Document, Model } from "mongoose";
+
 
 export interface IUserDocument extends Document {
-    _id:String;
-    email:String;
-    password:String;
-    fullName:String;
+    _id: string; 
+    email: string;
+    password: string;
+    fullName: string; 
 }
 
-
-export interface IUserCollection extends Model<IUserDocument>{}
+export interface IUserCollection extends Model<IUserDocument> {}

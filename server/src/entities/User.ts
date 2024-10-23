@@ -1,6 +1,7 @@
-export interface User {
-    id:string;
-    email:string;
+interface IUserDocument extends Document {
+    _id: string;
+    email: string;
     password: string;
-    role:string;
+    fullName:string;
 }
+export default IUserDocument
