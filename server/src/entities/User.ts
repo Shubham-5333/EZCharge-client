@@ -1,7 +1,11 @@
-interface IUserDocument extends Document {
-    _id: string;
-    email: string;
-    password: string;
-    fullName:string;
+export class User {
+    constructor(    
+        public readonly _id:string,
+        public readonly email:string,
+        public readonly password:string,
+        public readonly fullName:string,
+
+    ){}
 }
-export default IUserDocument
+
+

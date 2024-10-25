@@ -1,6 +1,8 @@
-import  User  from "../../entities/User";
+import  {User}  from "../../entities/User";
 
 export interface IUserRepository {
-    findByEmail(email: string): Promise<User | null>;
-    createUser(user: User): Promise<User>;
+  createUser(email:string,password:string,fullName:string): Promise<User>;
+    findUser(email: string,password:string): Promise<User[] | null>;
   }
+
+ 
