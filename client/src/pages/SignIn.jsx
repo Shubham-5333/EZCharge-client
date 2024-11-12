@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import loginImage from '../assets/loginImage.png'; 
 import google from '../assets/google.png'; 
 import { Link } from 'react-router-dom';
-import api from '../api';
+import api from '../api/api';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.post('/login', { email, password });
+      const { data } = await api.post('/signin', { email, password });
       localStorage.setItem('token', data.token);
       navigate('/');
     } catch (error) {

@@ -28,6 +28,7 @@ const Navbar = () => {
           <li><Link className="text-white hover:text-green-300" to="/services">Services</Link></li>
           <li><Link className="text-white hover:text-green-300" to="/garage">Garage</Link></li>
           <li><Link className="text-white hover:text-green-300" to="/support">Support</Link></li>
+          <li><Link className="text-white hover:text-green-300" to="/profile">UserProfile</Link></li>
         </ul>
 
 

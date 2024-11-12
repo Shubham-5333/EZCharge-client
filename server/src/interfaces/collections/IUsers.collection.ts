@@ -1,11 +1,13 @@
-import { Document, Model } from "mongoose";
+import { Document, Model,ObjectId } from "mongoose";
 
 
 export interface IUserDocument extends Document {
-    _id: string; 
+    _id: ObjectId; 
+    fullName: string; 
     email: string;
     password: string;
-    fullName: string; 
+    OTPVerfication:boolean;
+    isBlocked:boolean;
 }
 
 export interface IUserCollection extends Model<IUserDocument> {}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import { useNavigate } from 'react-router-dom'; 
+import api from '../api/api';
 import { Link } from 'react-router-dom';
+import { data } from 'autoprefixer';
 
 const SignUp = () => {
   const [fullName, setFullName] = useState('');
@@ -10,23 +11,21 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
 
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const { data } = await api.post('/register', { fullName, email, password });
-      localStorage.setItem('token', data.token);
-      navigate('/');
+        const response = await api.post('http://localhost:5000/api/signUp', {
+            fullName: data.email,
+            password: data.password,
+        }, { withCredentials: true });
+        console.log(response.data);
     } catch (error) {
-      console.error('Sign up error', error);
+        console.error("Sign up error", error);
     }
-  };
+};
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -92,7 +91,7 @@ const SignUp = () => {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
                 Confirm Password
               </label>
@@ -107,8 +106,8 @@ const SignUp = () => {
                   autoComplete="new-password"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
 
             <div>
               <button

@@ -1,17 +1,19 @@
-import express from 'express';
-import { AuthController } from '../../adapters/controllers/authController';
-import { UserRepo } from '../../adapters/repositories/UserRepository';
-// import passport from 'passport';
+import express,{NextFunction,Request,Response, Router} from 'express'
 
-const userRepo = new UserRepo()
-const controller = new AuthController(userRepo)
+import { AuthController } from '../../adapters/controllers/AuthController'
+// import { AuthUsecase } from '../../usecases/auth.usecase'
+import { AuthRepository } from '../../adapters/repositories/auth.repository'
+
+
 const router = express.Router();
+const authRepository = new AuthRepository()
+// const authUsecase = new AuthUsecase(authRepository)
+const authController = new AuthController(authRepository)
 
-router.post('/signup', controller.onCreateUser);
-router.post('/signin', controller.onFindUser);
-// router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-// router.get('/auth/google/callback', passport.authenticate('google', { session: false }), (req, res) => {
-//   res.redirect('/');
-// });
-
-export default router;
+export default router.post('/signUp',(req:Request,res:Response,next:NextFunction)=>{
+    authController.signup(req,res,next)
+    authController.signin(req,res,next)
+})
+// export default router.post('/signIn',(req:Request,res:Response,next:NextFunction)=>{
+//     authController.signIn(req,res,next)
+// })

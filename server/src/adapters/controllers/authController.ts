@@ -1,106 +1,56 @@
-// import bcrypt from 'bcryptjs';
-// import jwt from 'jsonwebtoken';
-// import { Request, Response } from 'express';
-// import { UserRepository } from '../repositories/UserRepository';
-// // import User from '../../entities/User';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// const userRepository = new UserRepository();
-
-// export const SignUp = async (req: Request, res: Response): Promise<void> => {
-//     const { email, password, fullName } = req.body;
-//     try {
-
-//         const existingUser = await userRepository.getDataByEmail(email);
-//         if (existingUser) {
-//             res.status(400).json({ message: 'User already exists' });
-//             return; // Stop further execution
-//         }
-
-//         // Hash the password
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         // Create a new user object
-//         // const newUser: User = { _id: '', email, password: hashedPassword, fullName };
-//         // Save the new user
-//         // const createdUser = await userRepository.createUser(newUser);
-
-//         // Send success response
-//         // res.status(201).json({ message: 'User registered successfully', user: createdUser });
-//     } catch (error) {
-//         // Log the error and send a response
-//         console.error('Error during sign-up:', error);
-//         res.status(500).json({ message: 'Error registering user' });
-//     }
-// };
-
-// export const SignIn = async (req: Request, res: Response): Promise<void> => {
-//     const { email, password } = req.body;
-//     try {
-//         // Check if the user exists
-//         const user = await userRepository.getDataByEmail(email);
-//         if (!user) {
-//             res.status(400).json({ message: 'User does not exist' });
-//             return; // Stop further execution
-//         }
-
-//         // Verify the password
-//         const isPasswordValid = await bcrypt.compare(password, user.password);
-//         if (!isPasswordValid) {
-//             res.status(400).json({ message: 'Invalid password' });
-//             return; // Stop further execution
-//         }
-
-//         // Generate a JWT token
-//         const token = jwt.sign(
-//             { id: user._id, email: user.email },
-//             process.env.JWT_SECRET as string,
-//             { expiresIn: '1h' }
-//         );
-
-//         // Send success response with the token
-//         res.status(200).json({ message: 'Login successful', token });
-//     } catch (error) {
-//         // Log the error and send a response
-//         console.error('Error during sign-in:', error);
-//         res.status(500).json({ message: 'Error logging in' });
-//     }
-// };
-
-
-// authController.ts
-import { Request, Response, NextFunction } from 'express';
-import { IUserRepository } from '../../interfaces/repositories/IUserRepository';
+import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { AuthRepository } from '../repositories/auth.repository';
 
 export class AuthController {
-  private repo: IUserRepository;
+    private authRepository: AuthRepository;
 
-  constructor(repo: IUserRepository) {
-    this.repo = repo;
+    constructor(authRepository: AuthRepository) {
+        this.authRepository = authRepository;
+    }
+
+    async signup(req: Request, res: Response, next: NextFunction) {
+        try {
+            const body = req.body;
+            console.log("Received signup data:", body);
+
+            const createdUser = await this.authRepository.create(body);
+            console.log("User created:", createdUser);
+
+            return res.status(201).json({ message: "User created successfully", user: createdUser });
+        } catch (error) {
+            console.log(error);
+            return next(error);
+        }
+    }
+
+    async signin(req: Request, res: Response, next: NextFunction) {
+      try {
+          const body = req.body;
+          const user = await this.authRepository.login(body);
+          if (!user) {
+              return res.status(401).json({ message: "Invalid credentials" });
+          }
+  
+          // Generate JWT token
+          const token = jwt.sign(
+              { email: user.email, id: user._id },
+              process.env.JWT_SECRET || "your-secret-key",
+              { expiresIn: "1h" }
+          );
+  
+          // Set token as an HttpOnly cookie
+          res.cookie('token', token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+              maxAge: 3600000, // 1 hour in milliseconds
+              sameSite: 'lax',
+          });
+  
+          res.status(200).json({ message: "Login successful" });
+      } catch (error) {
+          next(error);
+      }
   }
-
-  // Define the method with correct signature
-  public onCreateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const { email, password, fullName } = req.body;
-      const user = await this.repo.createUser(email, password, fullName);
-      res.status(201).json({ user });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public onFindUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const { email, password } = req.body;
-      const user = await this.repo.findUser(email, password);
-    //   if (!user) {
-    //     return res.status(404).json({ message: 'User not found' });
-    //   }
-      res.status(200).json({ user });
-    } catch (error) {
-      next(error);
-    }
-  };
+  
 }

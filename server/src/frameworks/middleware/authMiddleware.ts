@@ -1,20 +1,19 @@
-import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
-dotenv.config();
+export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.header('Authorization')?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: 'Access Denied' });
-  }
+    if (!token) {
+        res.status(401).json({ message: "Unauthorized: No token provided" });
+        return; // Make sure to return after sending a response
+    }
 
-  try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = verified;
-    next();
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid Token' });
-  }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "your-secret-key");
+        req.user = decoded; // Attach user info to the request
+        next();
+    } catch (error) {
+        res.status(401).json({ message: "Unauthorized: Invalid token" });
+    }
 };
